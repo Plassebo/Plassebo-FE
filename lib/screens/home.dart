@@ -20,6 +20,7 @@ class _ContainerScreen extends State<ContainerScreen> {
 
   final List<Widget> _pages = [
     HomeScreen(),
+    HomeScreen(),
     Page1Screen(),
     Page2Screen(),
   ];
@@ -35,7 +36,8 @@ class _ContainerScreen extends State<ContainerScreen> {
     return Scaffold(
         appBar: Header(),
         drawer: DrawerMenu(),
-        body: Footer(
+        body: _pages[_selectedIndex],
+        bottomNavigationBar: Footer(
           onItemTapped: _onItemTapped,
           pages: _pages,
           selectedIndex: _selectedIndex,

@@ -20,6 +20,7 @@ class _ContainerScreen extends State<ContainerScreen> {
 
   final List<Widget> _pages = [
     ChattingScreen(),
+    ChattingScreen(),
     Page1Screen(),
     Page2Screen(),
   ];
@@ -59,7 +60,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
           ChatContainer(),
           Column(children: [
             SizedBox(
-              height: MediaQuery.of(context).size.height - 280,
+              height: MediaQuery.of(context).size.height - 300,
             ),
             _chattingField()
           ])
