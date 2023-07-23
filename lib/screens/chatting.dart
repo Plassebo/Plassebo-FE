@@ -60,16 +60,16 @@ class _ContainerScreen extends State<ContainerScreen> {
           onTap: _onItemTapped,
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: '홈',
+              icon: Icon(Icons.account_circle_outlined),
+              label: '내 정보',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.pageview),
-              label: '페이지 1',
+              label: '위치 촬영',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.pageview),
-              label: '페이지 2',
+              label: '즐겨찾기',
             ),
           ],
           backgroundColor: Color(0xFF4A7DFF),
@@ -263,12 +263,12 @@ class BotChat extends StatelessWidget {
         Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              color: Color.fromARGB(205, 116, 155, 255),
+              color: Color(0xFF608CFF),
             ),
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             margin: const EdgeInsets.symmetric(vertical: 6),
             child: Text("저도 잘 모르겠어요",
-                style: TextStyle(fontSize: 18, color: Color(0xFF292929)))),
+                style: TextStyle(fontSize: 18, color: Color(0xFFFFFFFF)))),
       ],
     );
   }
