@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:plassebo_flutter/widgets/header.dart';
+import 'package:plassebo_flutter/widgets/drawer_menu.dart';
+import 'package:plassebo_flutter/widgets/footer.dart';
 
 class Chatting extends StatelessWidget {
   @override
@@ -30,119 +33,14 @@ class _ContainerScreen extends State<ContainerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          '부산알리미',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: Color(0xFF4A7DFF),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SettingsScreen()),
-              );
-            },
-          ),
-        ],
-      ),
-      drawer: DrawerMenu(),
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle_outlined),
-              label: '내 정보',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.pageview),
-              label: '위치 촬영',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.pageview),
-              label: '즐겨찾기',
-            ),
-          ],
-          backgroundColor: Color(0xFF4A7DFF),
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white70),
-    );
-  }
-}
-
-// 드로어 메뉴 위젯
-class DrawerMenu extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Color(0xFF4A7DFF),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    // image: DecorationImage(
-                    //   image: AssetImage(
-                    //       'assets/profile_image.png'), // 프로필 이미지
-                    //   fit: BoxFit.fill,
-                    // ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  '사용자 프로필',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          ListTile(
-            leading: Icon(Icons.home),
-            title: Text('홈'),
-            onTap: () {
-              Navigator.pushNamed(context, '/');
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.pageview),
-            title: Text('페이지 1'),
-            onTap: () {
-              Navigator.pushNamed(context, '/page1');
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.pageview),
-            title: Text('페이지 2'),
-            onTap: () {
-              Navigator.pushNamed(context, '/page2');
-            },
-          ),
-        ],
-      ),
-    );
+        appBar: Header(),
+        drawer: DrawerMenu(),
+        body: _pages[_selectedIndex],
+        bottomNavigationBar: Footer(
+          onItemTapped: _onItemTapped,
+          pages: _pages,
+          selectedIndex: _selectedIndex,
+        ));
   }
 }
 
@@ -315,21 +213,6 @@ class Page2Screen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text('페이지 2'),
-    );
-  }
-}
-
-// 설정 페이지
-class SettingsScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('설정'),
-      ),
-      body: Center(
-        child: Text('설정 페이지'),
-      ),
     );
   }
 }
