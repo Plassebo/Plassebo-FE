@@ -268,7 +268,7 @@ class BotChat extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             margin: const EdgeInsets.symmetric(vertical: 6),
             child: Text("저도 잘 모르겠어요",
-                style: TextStyle(fontSize: 16, color: Color(0xFF292929)))),
+                style: TextStyle(fontSize: 18, color: Color(0xFF292929)))),
       ],
     );
   }
@@ -292,7 +292,7 @@ class MyChat extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           margin: const EdgeInsets.symmetric(vertical: 6),
           child: Text("만원대 점심 먹기 좋은 곳 있니?",
-              style: TextStyle(fontSize: 16, color: Color(0xFF292929))),
+              style: TextStyle(fontSize: 18, color: Color(0xFF292929))),
         )
       ],
     );
