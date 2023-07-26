@@ -4,6 +4,8 @@ import 'package:plassebo_flutter/screens/login.dart';
 import 'package:plassebo_flutter/screens/home.dart';
 import 'package:plassebo_flutter/screens/signUp.dart';
 
+import 'package:plassebo_flutter/screens/chatting.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -15,6 +17,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => Login(),
         '/signUp': (context) => SignUp(),
         '/home': (context) => Home(),
+        '/chatting': (context) => Chatting(),
       },
     );
   }
@@ -83,6 +86,26 @@ class MainScreen extends StatelessWidget {
                 },
                 child: Text(
                   '임시 메인 이동 버튼',
+                  style: TextStyle(fontSize: 15),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromARGB(255, 94, 94, 94),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
+            SizedBox(
+              width: 160,
+              height: 30,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/chatting');
+                },
+                child: Text(
+                  '임시 채팅 이동 버튼',
                   style: TextStyle(fontSize: 15),
                 ),
                 style: ElevatedButton.styleFrom(
