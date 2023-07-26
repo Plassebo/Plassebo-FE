@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:plassebo_flutter/screens/login.dart';
 import 'package:plassebo_flutter/screens/home.dart';
+import 'package:plassebo_flutter/screens/nearby.dart';
 import 'package:plassebo_flutter/screens/signUp.dart';
 
 import 'package:plassebo_flutter/screens/chatting.dart';
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
         '/signUp': (context) => SignUp(),
         '/home': (context) => Home(),
         '/chatting': (context) => Chatting(),
+        '/nearby': (context) => NearBy()
       },
     );
   }
@@ -106,6 +108,26 @@ class MainScreen extends StatelessWidget {
                 },
                 child: Text(
                   '임시 채팅 이동 버튼',
+                  style: TextStyle(fontSize: 15),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromARGB(255, 94, 94, 94),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
+            SizedBox(
+              width: 160,
+              height: 30,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/nearby');
+                },
+                child: Text(
+                  '임시 근처 맛집 이동',
                   style: TextStyle(fontSize: 15),
                 ),
                 style: ElevatedButton.styleFrom(
