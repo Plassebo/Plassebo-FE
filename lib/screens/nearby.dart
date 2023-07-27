@@ -52,15 +52,26 @@ class NearByScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.bottomCenter,
-      children: [WallPaper(), RestaurantContainer()],
+      children: [
+        WallPaper(img: "assets/haewoondae.png", location: "해운대"),
+        RestaurantContainer(
+          location: "해운대",
+          restaurantList: [
+            RestaurantItem(),
+            RestaurantItem(),
+            RestaurantItem(),
+          ],
+        )
+      ],
     );
   }
 }
 
 class WallPaper extends StatelessWidget {
-  const WallPaper({
-    super.key,
-  });
+  final String img;
+  final String location;
+
+  const WallPaper({required this.img, required this.location});
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +82,7 @@ class WallPaper extends StatelessWidget {
       padding: EdgeInsets.all(30),
       child: Row(children: [
         Image.asset(
-          "assets/haewoondae.png",
+          img,
           width: 210,
           height: 190,
           fit: BoxFit.fill,
@@ -103,7 +114,7 @@ class WallPaper extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    "해운대",
+                    location,
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
@@ -125,9 +136,10 @@ class WallPaper extends StatelessWidget {
 }
 
 class RestaurantContainer extends StatelessWidget {
-  const RestaurantContainer({
-    super.key,
-  });
+  final String location;
+  final List<Widget> restaurantList;
+  const RestaurantContainer(
+      {required this.location, required this.restaurantList});
 
   @override
   Widget build(BuildContext context) {
@@ -145,13 +157,11 @@ class RestaurantContainer extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                   border: Border(bottom: BorderSide(color: Color(0xFFDDDDDD)))),
-              child: Text("해운대 맛집",
-                  style: TextStyle(
-                      color: Color(0xFF797979),
-                      fontWeight: FontWeight.w600,
-                      fontSize: 25)),
+              child: RestaurantHeader(
+                location: location,
+              ),
             ),
-            RestaurantItemList(),
+            RestaurantItemList(restaurantList: restaurantList),
           ],
         ),
       ),
@@ -159,21 +169,32 @@ class RestaurantContainer extends StatelessWidget {
   }
 }
 
-class RestaurantItemList extends StatelessWidget {
-  const RestaurantItemList({
-    super.key,
+class RestaurantHeader extends StatelessWidget {
+  final String location;
+  const RestaurantHeader({
+    required this.location,
   });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text("$location 맛집",
+        style: TextStyle(
+            color: Color(0xFF797979),
+            fontWeight: FontWeight.w600,
+            fontSize: 25));
+  }
+}
+
+class RestaurantItemList extends StatelessWidget {
+  final List<Widget> restaurantList;
+  const RestaurantItemList({required this.restaurantList});
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: ListView(
         shrinkWrap: true,
-        children: [
-          RestaurantItem(),
-          RestaurantItem(),
-          RestaurantItem(),
-        ],
+        children: restaurantList,
       ),
     );
   }
