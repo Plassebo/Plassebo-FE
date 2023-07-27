@@ -151,11 +151,29 @@ class RestaurantContainer extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                       fontSize: 25)),
             ),
-            RestaurantItem(),
-            RestaurantItem(),
-            RestaurantItem(),
+            RestaurantItemList(),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class RestaurantItemList extends StatelessWidget {
+  const RestaurantItemList({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          RestaurantItem(),
+          RestaurantItem(),
+          RestaurantItem(),
+        ],
       ),
     );
   }
