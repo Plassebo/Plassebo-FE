@@ -1,9 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:plassebo_flutter/data/model/post_nearby.dart';
+import 'package:plassebo_flutter/data/provider/request.dart';
 import 'package:plassebo_flutter/widgets/header.dart';
 import 'package:plassebo_flutter/widgets/footer.dart';
 import 'package:plassebo_flutter/widgets/drawer_menu.dart';
 import 'package:plassebo_flutter/screens/myinfo.dart';
 import 'package:plassebo_flutter/screens/favorites.dart';
+
+import 'package:provider/provider.dart';
 
 class NearBy extends StatelessWidget {
   @override
@@ -33,12 +40,31 @@ class _ContainerScreen extends State<ContainerScreen> {
     });
   }
 
+  PostNearByResponse data = PostNearByResponse();
+
+  void setData(PostNearByResponse model) {
+    setState(() {
+      data = model;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    debugPrint("post multipart start...");
+    postMultipart("/Users/nykoh/git/Plassebo-FE/assets/haewoondae.png",
+        "http://localhost:8080/images", setData);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(),
       drawer: DrawerMenu(),
-      body: NearByScreen(),
+      body: NearByScreen(
+        location: data.attractionName,
+        restaurantList: data.restaurants,
+      ),
       bottomNavigationBar: Footer(
           selectedIndex: _selectedIndex,
           onItemTapped: _onItemTapped,
@@ -48,19 +74,29 @@ class _ContainerScreen extends State<ContainerScreen> {
 }
 
 class NearByScreen extends StatelessWidget {
+  final String location;
+  final List<dynamic> restaurantList;
+  NearByScreen({required this.location, required this.restaurantList});
   @override
   Widget build(BuildContext context) {
+    debugPrint(restaurantList.toString());
+
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
-        WallPaper(img: "assets/haewoondae.png", location: "해운대"),
+        WallPaper(img: "assets/haewoondae.png", location: location),
         RestaurantContainer(
-          location: "해운대",
-          restaurantList: [
-            RestaurantItem(),
-            RestaurantItem(),
-            RestaurantItem(),
-          ],
+          location: location,
+          restaurantList: restaurantList
+              .map((rest) => RestaurantItem(
+                    title: rest['title'],
+                    foodType: "한식",
+                    address: rest['addr1'] == null ? "" : rest['addr1'],
+                    telephone: rest['tel'],
+                    imgUri:
+                        rest['firstimage'] == null ? "" : rest['firstimage'],
+                  ))
+              .toList(),
         )
       ],
     );
@@ -111,7 +147,9 @@ class WallPaper extends StatelessWidget {
               SizedBox(
                 height: 5,
               ),
-              Row(
+              Wrap(
+                direction: Axis.horizontal,
+                alignment: WrapAlignment.start,
                 children: [
                   Text(
                     location,
@@ -120,11 +158,11 @@ class WallPaper extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                         fontSize: 20),
                   ),
-                  Text(" 입니다.",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16)),
+                  // Text(" 입니다.",
+                  //     style: TextStyle(
+                  //         color: Colors.white,
+                  //         fontWeight: FontWeight.w500,
+                  //         fontSize: 16)),
                 ],
               )
             ],
@@ -201,9 +239,17 @@ class RestaurantItemList extends StatelessWidget {
 }
 
 class RestaurantItem extends StatelessWidget {
-  const RestaurantItem({
-    super.key,
-  });
+  final String title;
+  final String foodType;
+  final String address;
+  final String telephone;
+  final String imgUri;
+  const RestaurantItem(
+      {required this.title,
+      required this.foodType,
+      required this.address,
+      required this.telephone,
+      required this.imgUri});
 
   @override
   Widget build(BuildContext context) {
@@ -229,7 +275,7 @@ class RestaurantItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                        child: Text("미우 숯불갈비",
+                        child: Text(title,
                             style: TextStyle(
                                 color: Color(0xFF515151),
                                 fontWeight: FontWeight.w600,
@@ -238,7 +284,7 @@ class RestaurantItem extends StatelessWidget {
                       width: 70,
                     ),
                     SizedBox(
-                        child: Text("한식",
+                        child: Text(foodType,
                             style: TextStyle(
                                 color: Color(0xFF797979),
                                 fontWeight: FontWeight.w500,
@@ -248,12 +294,20 @@ class RestaurantItem extends StatelessWidget {
                 SizedBox(
                   height: 30,
                 ),
-                Text("부산 해운대구 구남로 22 2층",
-                    style: TextStyle(
-                        color: Color(0xFF797979),
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16)),
-                Text("0507-1389-8983",
+                SizedBox(
+                  width: 230,
+                  child: Flexible(
+                    child: Text(
+                      address,
+                      style: TextStyle(
+                          color: Color(0xFF797979),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+                Text(telephone,
                     style: TextStyle(
                         color: Color(0xFF797979),
                         fontWeight: FontWeight.w500,
