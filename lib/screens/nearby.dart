@@ -10,7 +10,7 @@ import 'package:plassebo_flutter/widgets/drawer_menu.dart';
 import 'package:plassebo_flutter/screens/myinfo.dart';
 import 'package:plassebo_flutter/screens/favorites.dart';
 
-import 'package:path_provider/path_provider.dart';
+import 'package:extended_image/extended_image.dart';
 import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
@@ -125,8 +125,9 @@ class NearByScreen extends StatelessWidget {
                     foodType: "한식",
                     address: rest['addr1'] == null ? "" : rest['addr1'],
                     telephone: rest['tel'],
-                    imgUri:
-                        rest['firstimage'] == null ? "" : rest['firstimage'],
+                    imgUri: rest['firstimage'] == null
+                        ? "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg"
+                        : rest['firstimage'],
                   ))
               .toList(),
         )
@@ -285,6 +286,8 @@ class RestaurantItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("img uri");
+    debugPrint(imgUri);
     return Container(
       height: 160,
       decoration: BoxDecoration(
@@ -292,10 +295,8 @@ class RestaurantItem extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Row(children: [
-          Image.network(
-            imgUri == ""
-                ? "https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg"
-                : imgUri,
+          ExtendedImage.network(
+            imgUri,
             height: 140,
             width: 140,
             fit: BoxFit.fill,
