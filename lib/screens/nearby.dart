@@ -13,6 +13,8 @@ import 'package:plassebo_flutter/screens/favorites.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 
+import 'package:image_picker/image_picker.dart';
+
 class NearBy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -43,19 +45,45 @@ class _ContainerScreen extends State<ContainerScreen> {
 
   PostNearByResponse data = PostNearByResponse();
 
+  Image image = Image.file(File(""));
+
   void setData(PostNearByResponse model) {
     setState(() {
       data = model;
     });
   }
 
+  Future<String> pickAndUploadImage() async {
+    final ImagePicker picker = ImagePicker();
+    // final XFile? pickedFile =
+    //     await picker.pickImage(source: ImageSource.gallery);
+    try {
+      final XFile? photo =
+          await picker.pickImage(source: ImageSource.camera, imageQuality: 90);
+      // 카메라로 찍어서
+      if (photo != null) {
+        return photo.path;
+      }
+      return "";
+    } catch (e) {
+      debugPrint(e.toString());
+      return "";
+    }
+  }
+
+  void takePicture() async {
+    final String filePath = await pickAndUploadImage();
+    postMultipart(File(filePath), "http://172.30.1.43:8080/images", setData);
+    // setState(() {
+    //   image = Image.file(File(filePath));
+    // });
+    debugPrint("take picture done");
+  }
+
   @override
-  void initState() async {
+  void initState() {
     super.initState();
-    NearByStorage storage = NearByStorage();
-    debugPrint("post multipart start...");
-    postMultipart(
-        await storage._localFile, "http://34.22.67.47:8080/images", setData);
+    takePicture();
   }
 
   @override
@@ -75,26 +103,16 @@ class _ContainerScreen extends State<ContainerScreen> {
   }
 }
 
-class NearByStorage {
-  Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-    return directory.path;
-  }
-
-  Future<File> get _localFile async {
-    final path = await _localPath;
-    return File('$path/haewoondae.png');
-  }
-}
-
 class NearByScreen extends StatelessWidget {
   final String location;
   final List<dynamic> restaurantList;
-  NearByScreen({required this.location, required this.restaurantList});
+
+  NearByScreen({
+    required this.location,
+    required this.restaurantList,
+  });
   @override
   Widget build(BuildContext context) {
-    // debugPrint(restaurantList.toString());
-
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
@@ -274,8 +292,10 @@ class RestaurantItem extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Row(children: [
-          Image.asset(
-            "assets/galbi.png",
+          Image.network(
+            imgUri == ""
+                ? "https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg"
+                : imgUri,
             height: 140,
             width: 140,
             fit: BoxFit.fill,
