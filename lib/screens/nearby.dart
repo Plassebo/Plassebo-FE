@@ -10,7 +10,8 @@ import 'package:plassebo_flutter/widgets/drawer_menu.dart';
 import 'package:plassebo_flutter/screens/myinfo.dart';
 import 'package:plassebo_flutter/screens/favorites.dart';
 
-import 'package:provider/provider.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 class NearBy extends StatelessWidget {
   @override
@@ -49,11 +50,12 @@ class _ContainerScreen extends State<ContainerScreen> {
   }
 
   @override
-  void initState() {
+  void initState() async {
     super.initState();
+    NearByStorage storage = NearByStorage();
     debugPrint("post multipart start...");
-    postMultipart("/Users/nykoh/git/Plassebo-FE/assets/haewoondae.png",
-        "http://localhost:8080/images", setData);
+    postMultipart(
+        await storage._localFile, "http://34.22.67.47:8080/images", setData);
   }
 
   @override
@@ -73,13 +75,25 @@ class _ContainerScreen extends State<ContainerScreen> {
   }
 }
 
+class NearByStorage {
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+    return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/haewoondae.png');
+  }
+}
+
 class NearByScreen extends StatelessWidget {
   final String location;
   final List<dynamic> restaurantList;
   NearByScreen({required this.location, required this.restaurantList});
   @override
   Widget build(BuildContext context) {
-    debugPrint(restaurantList.toString());
+    // debugPrint(restaurantList.toString());
 
     return Stack(
       alignment: Alignment.bottomCenter,
