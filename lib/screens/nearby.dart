@@ -45,7 +45,8 @@ class _ContainerScreen extends State<ContainerScreen> {
 
   PostNearByResponse data = PostNearByResponse();
 
-  Image image = Image.file(File(""));
+  Image image = Image.network(
+      "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg");
 
   void setData(PostNearByResponse model) {
     setState(() {
@@ -74,9 +75,10 @@ class _ContainerScreen extends State<ContainerScreen> {
   void takePicture() async {
     final String filePath = await pickAndUploadImage();
     postMultipart(File(filePath), "http://172.30.1.43:8080/images", setData);
-    // setState(() {
-    //   image = Image.file(File(filePath));
-    // });
+    setState(() {
+      image = Image.file(File(filePath),
+          width: 180, height: 160, fit: BoxFit.cover);
+    });
     debugPrint("take picture done");
   }
 
@@ -92,9 +94,9 @@ class _ContainerScreen extends State<ContainerScreen> {
       appBar: Header(),
       drawer: DrawerMenu(),
       body: NearByScreen(
-        location: data.attractionName,
-        restaurantList: data.restaurants,
-      ),
+          location: data.attractionName,
+          restaurantList: data.restaurants,
+          image: image),
       bottomNavigationBar: Footer(
           selectedIndex: _selectedIndex,
           onItemTapped: _onItemTapped,
@@ -106,17 +108,18 @@ class _ContainerScreen extends State<ContainerScreen> {
 class NearByScreen extends StatelessWidget {
   final String location;
   final List<dynamic> restaurantList;
+  final Image image;
 
-  NearByScreen({
-    required this.location,
-    required this.restaurantList,
-  });
+  NearByScreen(
+      {required this.location,
+      required this.restaurantList,
+      required this.image});
   @override
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
-        WallPaper(img: "assets/haewoondae.png", location: location),
+        WallPaper(img: image, location: location),
         RestaurantContainer(
           location: location,
           restaurantList: restaurantList
@@ -137,7 +140,7 @@ class NearByScreen extends StatelessWidget {
 }
 
 class WallPaper extends StatelessWidget {
-  final String img;
+  final Image img;
   final String location;
 
   const WallPaper({required this.img, required this.location});
@@ -149,18 +152,14 @@ class WallPaper extends StatelessWidget {
       height: double.infinity,
       alignment: Alignment.topLeft,
       padding: EdgeInsets.all(30),
-      child: Row(children: [
-        Image.asset(
-          img,
-          width: 210,
-          height: 190,
-          fit: BoxFit.fill,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        ClipRRect(borderRadius: BorderRadius.circular(10.0), child: img),
+        SizedBox(
+          width: 140,
+          child: Wrap(
+            direction: Axis.horizontal,
+            alignment: WrapAlignment.start,
+            runSpacing: 5,
             children: [
               Text(
                 "나의 위치",
@@ -170,7 +169,7 @@ class WallPaper extends StatelessWidget {
                     fontSize: 20),
               ),
               SizedBox(
-                height: 30,
+                height: 43,
               ),
               Text("현재 나의 위치는",
                   style: TextStyle(
@@ -191,17 +190,18 @@ class WallPaper extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                         fontSize: 20),
                   ),
-                  // Text(" 입니다.",
-                  //     style: TextStyle(
-                  //         color: Colors.white,
-                  //         fontWeight: FontWeight.w500,
-                  //         fontSize: 16)),
+                  Text("입니다.",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16)),
                 ],
               )
             ],
           ),
-        )
+        ),
       ]),
+      // ),
     );
   }
 }
@@ -295,11 +295,14 @@ class RestaurantItem extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Row(children: [
-          ExtendedImage.network(
-            imgUri,
-            height: 140,
-            width: 140,
-            fit: BoxFit.fill,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: ExtendedImage.network(
+              imgUri,
+              height: 140,
+              width: 140,
+              fit: BoxFit.cover,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(15.0),
@@ -310,14 +313,16 @@ class RestaurantItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                        child: Text(title,
-                            style: TextStyle(
+                        width: 155,
+                        child: Flexible(
+                          child: Text(title,
+                              style: TextStyle(
                                 color: Color(0xFF515151),
                                 fontWeight: FontWeight.w600,
-                                fontSize: 20))),
-                    SizedBox(
-                      width: 70,
-                    ),
+                                fontSize: 20,
+                                overflow: TextOverflow.ellipsis,
+                              )),
+                        )),
                     SizedBox(
                         child: Text(foodType,
                             style: TextStyle(
@@ -330,7 +335,7 @@ class RestaurantItem extends StatelessWidget {
                   height: 30,
                 ),
                 SizedBox(
-                  width: 230,
+                  width: 190,
                   child: Flexible(
                     child: Text(
                       address,

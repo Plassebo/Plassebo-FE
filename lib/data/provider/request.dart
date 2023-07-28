@@ -18,7 +18,7 @@ void postMultipart(File img, String uri, Function setData) async {
   request.files.add(await http.MultipartFile.fromPath("file", img.path));
   final res = await request.send();
   final result = await http.Response.fromStream(res);
-  debugPrint(result.body);
+  // debugPrint(result.body);
   final data = PostNearByResponse.fromJson(jsonDecode(result.body));
   setData(data);
 }
