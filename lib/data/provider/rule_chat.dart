@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 
 String responseText = '';
 Map<String, List<String>> keywordsDict = {
@@ -25,8 +24,6 @@ void getResponse(String inputString) async {
       restaurants.add(data);
     });
 
-    debugPrint(restaurants[0]);
-
     for (final r in restaurants) {
       if (inputString.contains(r)) {
         restName = r;
@@ -48,7 +45,6 @@ void getResponse(String inputString) async {
     List<String> key = [];
     for (String intent in keywordsDict.keys) {
       for (String keyword in keywordsDict[intent]!) {
-        debugPrint(keyword);
         if (inputString.contains(keyword)) {
           matchedIntent.add(intent);
           break; // Stop checking other keywords for this intent if one is matched.
@@ -67,7 +63,6 @@ void getResponse(String inputString) async {
     } else if (key.isEmpty) {
       key.add("default");
     }
-    debugPrint(key.toString());
 
     responseText = responses[key.first]!;
 
