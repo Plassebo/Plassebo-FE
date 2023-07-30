@@ -3,6 +3,8 @@ import 'package:plassebo_flutter/widgets/header.dart';
 import 'package:plassebo_flutter/widgets/drawer_menu.dart';
 import 'package:plassebo_flutter/widgets/footer.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Chatting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -55,63 +57,69 @@ class _ChattingScreenState extends State<ChattingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          ChatContainer(),
-          Column(children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height - 300,
-            ),
-            _chattingField()
-          ])
-        ],
-      ),
+      body: Container(
+          child: Column(
+        children: [Expanded(child: ChatContainer()), _chattingField()],
+      )),
     );
   }
+
+  var _userEnteredMessage = '';
 
   Widget _chattingField() {
-    return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: Color(0xFFFFFFFF),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.25),
-              blurRadius: 4,
-              offset: Offset(8, 8),
-            )
-          ]),
-      margin: const EdgeInsets.symmetric(horizontal: 36),
-      padding: const EdgeInsets.only(left: 16),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-                onSubmitted: _handleSubmitted,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 13.0),
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: Color(0xFFFFFFFF),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.25),
+                blurRadius: 4,
+                offset: Offset(8, 8),
+              )
+            ]),
+        margin: const EdgeInsets.symmetric(horizontal: 36),
+        padding: const EdgeInsets.only(left: 16),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextField(
                 decoration:
-                    InputDecoration.collapsed(hintText: "원하는 맛집에 대해 물어보세요!")),
-          ),
-          Container(
-              margin: const EdgeInsets.symmetric(horizontal: 8),
-              child: Transform.rotate(
-                angle: 0.8,
-                child: IconButton(
-                    icon: Image.network(
-                      "https://s3-alpha-sig.figma.com/img/48ae/07a6/0facdf382e94bdcfad0d459a3f98cd84?Expires=1690761600&Signature=WiL9LUXu1vsKZRwywGPu~ILDNPn4cjQxN7lx094u1twevmHlDfq~sr77QZXbf8ByOzgPWYTYT4NFzP~TuQoAPzjxjVdT-4LtSUi2QoctHRYFNIVu4DZQqsqsWms6sjVCMaVH8tbTL2dL6CxPTTPopsfzhJn9OjfdGTlfEgOTH~ew8hyTtZEPx-hkBMf3CJDMq~6X~gPVCl65H0h0iry458Ovb-DTtRQw7RUHttFrZahsnOJxTfTlfCIdKFDoawkJE5PMe89AZ3UTPi-SWiXmLiyhsZ1nxeqKh-iXoPlfGFoOTPV5rBRZBOarxj8efQj40L66pBUNI5dDCn4Eobrtog__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
-                      width: 25,
-                      height: 25,
-                      fit: BoxFit.fill,
-                    ),
-                    onPressed: () {
-                      _handleSubmitted(_textController.text);
-                    }),
-              ))
-        ],
+                    InputDecoration.collapsed(hintText: "원하는 맛집에 대해 물어보세요!"),
+                onChanged: (val) {
+                  setState(() {
+                    _userEnteredMessage = val;
+                  });
+                },
+              ),
+            ),
+            Container(
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                child: Transform.rotate(
+                  angle: 0.8,
+                  child: IconButton(
+                      icon: Image.network(
+                        "https://s3-alpha-sig.figma.com/img/48ae/07a6/0facdf382e94bdcfad0d459a3f98cd84?Expires=1690761600&Signature=WiL9LUXu1vsKZRwywGPu~ILDNPn4cjQxN7lx094u1twevmHlDfq~sr77QZXbf8ByOzgPWYTYT4NFzP~TuQoAPzjxjVdT-4LtSUi2QoctHRYFNIVu4DZQqsqsWms6sjVCMaVH8tbTL2dL6CxPTTPopsfzhJn9OjfdGTlfEgOTH~ew8hyTtZEPx-hkBMf3CJDMq~6X~gPVCl65H0h0iry458Ovb-DTtRQw7RUHttFrZahsnOJxTfTlfCIdKFDoawkJE5PMe89AZ3UTPi-SWiXmLiyhsZ1nxeqKh-iXoPlfGFoOTPV5rBRZBOarxj8efQj40L66pBUNI5dDCn4Eobrtog__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
+                        width: 25,
+                        height: 25,
+                        fit: BoxFit.fill,
+                      ),
+                      onPressed: _userEnteredMessage.trim().isEmpty
+                          ? null
+                          : _handleSubmitted),
+                ))
+          ],
+        ),
       ),
     );
   }
 
-  void _handleSubmitted(String text) {
+  void _handleSubmitted() {
+    FirebaseFirestore.instance
+        .collection('chat')
+        .add({'text': _userEnteredMessage});
     _textController.clear();
   }
 }
@@ -119,12 +127,23 @@ class _ChattingScreenState extends State<ChattingScreen> {
 class ChatContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18),
-      child: Column(
-        children: [ChatTitle(), MyChat(), BotChat()],
-      ),
-    );
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance.collection("chat").snapshots(),
+        builder: (context,
+            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          final chatDocs = snapshot.data!.docs;
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18),
+            child: ListView.builder(
+                itemCount: chatDocs.length,
+                itemBuilder: (context, index) {
+                  return BotChat(chat: chatDocs[index]['text']);
+                }),
+          );
+        });
   }
 }
 
@@ -151,9 +170,8 @@ class ChatTitle extends StatelessWidget {
 }
 
 class BotChat extends StatelessWidget {
-  const BotChat({
-    super.key,
-  });
+  final String chat;
+  const BotChat({required this.chat});
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +184,7 @@ class BotChat extends StatelessWidget {
             ),
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             margin: const EdgeInsets.symmetric(vertical: 6),
-            child: Text("저도 잘 모르겠어요",
+            child: Text(chat,
                 style: TextStyle(fontSize: 18, color: Color(0xFFFFFFFF)))),
       ],
     );
