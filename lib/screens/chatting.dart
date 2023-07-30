@@ -54,17 +54,16 @@ class ChattingScreen extends StatefulWidget {
 
 class _ChattingScreenState extends State<ChattingScreen> {
   final TextEditingController _textController = TextEditingController();
+  var _userEnteredMessage = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-          child: Column(
+      body: Column(
         children: [Expanded(child: ChatContainer()), _chattingField()],
-      )),
+      ),
     );
   }
-
-  var _userEnteredMessage = '';
 
   Widget _chattingField() {
     return Padding(
@@ -86,6 +85,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
           children: [
             Expanded(
               child: TextField(
+                controller: _textController,
                 decoration:
                     InputDecoration.collapsed(hintText: "원하는 맛집에 대해 물어보세요!"),
                 onChanged: (val) {
@@ -119,7 +119,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
   void _handleSubmitted() {
     FirebaseFirestore.instance
         .collection('chat')
-        .add({'text': _userEnteredMessage});
+        .add({'text': _userEnteredMessage, 'time': Timestamp.now()});
     _textController.clear();
   }
 }
@@ -128,7 +128,10 @@ class ChatContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: FirebaseFirestore.instance.collection("chat").snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection("chat")
+            .orderBy('time', descending: true)
+            .snapshots(),
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -138,6 +141,7 @@ class ChatContainer extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18),
             child: ListView.builder(
+                reverse: true,
                 itemCount: chatDocs.length,
                 itemBuilder: (context, index) {
                   return BotChat(chat: chatDocs[index]['text']);
