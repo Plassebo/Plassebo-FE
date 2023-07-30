@@ -5,6 +5,8 @@ import 'package:plassebo_flutter/widgets/footer.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:plassebo_flutter/data/provider/rule_chat.dart';
+
 class Chatting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -89,9 +91,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
                 decoration:
                     InputDecoration.collapsed(hintText: "원하는 맛집에 대해 물어보세요!"),
                 onChanged: (val) {
-                  setState(() {
-                    _userEnteredMessage = val;
-                  });
+                  _userEnteredMessage = val;
                 },
               ),
             ),
@@ -117,9 +117,10 @@ class _ChattingScreenState extends State<ChattingScreen> {
   }
 
   void _handleSubmitted() {
-    FirebaseFirestore.instance
-        .collection('chat')
-        .add({'text': _userEnteredMessage, 'time': Timestamp.now()});
+    FirebaseFirestore.instance.collection('chat').add(
+        {'text': _userEnteredMessage, 'time': Timestamp.now(), 'isUser': true});
+    debugPrint("get response");
+    getResponse(_userEnteredMessage);
     _textController.clear();
   }
 }
@@ -144,7 +145,9 @@ class ChatContainer extends StatelessWidget {
                 reverse: true,
                 itemCount: chatDocs.length,
                 itemBuilder: (context, index) {
-                  return BotChat(chat: chatDocs[index]['text']);
+                  return chatDocs[index]['isUser']
+                      ? MyChat(chat: chatDocs[index]['text'])
+                      : BotChat(chat: chatDocs[index]['text']);
                 }),
           );
         });
@@ -196,9 +199,8 @@ class BotChat extends StatelessWidget {
 }
 
 class MyChat extends StatelessWidget {
-  const MyChat({
-    super.key,
-  });
+  final String chat;
+  const MyChat({required this.chat});
 
   @override
   Widget build(BuildContext context) {
@@ -212,7 +214,7 @@ class MyChat extends StatelessWidget {
           ),
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           margin: const EdgeInsets.symmetric(vertical: 6),
-          child: Text("만원대 점심 먹기 좋은 곳 있니?",
+          child: Text(chat,
               style: TextStyle(fontSize: 18, color: Color(0xFF292929))),
         )
       ],
