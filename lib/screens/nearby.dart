@@ -74,7 +74,7 @@ class _ContainerScreen extends State<ContainerScreen> {
 
   void takePicture() async {
     final String filePath = await pickAndUploadImage();
-    postMultipart(File(filePath), "http://172.30.1.43:8080/images", setData);
+    postMultipart(File(filePath), "http://34.22.67.47:8080/images", setData);
     setState(() {
       image = Image.file(File(filePath),
           width: 180, height: 160, fit: BoxFit.cover);
@@ -122,17 +122,19 @@ class NearByScreen extends StatelessWidget {
         WallPaper(img: image, location: location),
         RestaurantContainer(
           location: location,
-          restaurantList: restaurantList
-              .map((rest) => RestaurantItem(
-                    title: rest['title'],
-                    foodType: "한식",
-                    address: rest['addr1'] == null ? "" : rest['addr1'],
-                    telephone: rest['tel'],
-                    imgUri: rest['firstimage'] == null
-                        ? "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg"
-                        : rest['firstimage'],
-                  ))
-              .toList(),
+          restaurantList: restaurantList.isEmpty
+              ? [Text("주변 맛집이 없습니다.")]
+              : restaurantList
+                  .map((rest) => RestaurantItem(
+                      title: rest['title'],
+                      address: rest['addr1'] ?? "",
+                      telephone: rest['tel'],
+                      imgUri: rest['firstimage'] ??
+                          "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg",
+                      info: rest['info'] ?? "",
+                      time: rest['time'],
+                      distance: rest['distance']))
+                  .toList(),
         )
       ],
     );
@@ -271,27 +273,106 @@ class RestaurantItemList extends StatelessWidget {
   }
 }
 
-class RestaurantItem extends StatelessWidget {
+class RestaurantItem extends StatefulWidget {
   final String title;
-  final String foodType;
   final String address;
   final String telephone;
   final String imgUri;
-  const RestaurantItem(
+  final String info;
+  final Map<String, dynamic> time;
+  final double distance;
+  RestaurantItem(
       {required this.title,
-      required this.foodType,
       required this.address,
       required this.telephone,
-      required this.imgUri});
+      required this.imgUri,
+      required this.info,
+      required this.time,
+      required this.distance});
+
+  @override
+  State<RestaurantItem> createState() => _RestaurantItemState();
+}
+
+class _RestaurantItemState extends State<RestaurantItem> {
+  var isPressed = false;
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("img uri");
-    debugPrint(imgUri);
-    return Container(
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          isPressed = !isPressed;
+        });
+      },
+      child: Column(
+        children: [
+          BasicInfo(
+              imgUri: widget.imgUri,
+              title: widget.title,
+              distance: widget.distance,
+              address: widget.address,
+              telephone: widget.telephone),
+          if (isPressed && (widget.time.isNotEmpty || widget.info.isNotEmpty))
+            Column(children: [
+              if (widget.time.isNotEmpty)
+                ExpansionTile(
+                    title: Text("영업 시간"),
+                    children: widget.time.entries
+                        .map((e) => Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Wrap(runSpacing: 4, children: [
+                                Text(e.key),
+                                Text(" : "),
+                                Text(e.value)
+                              ]),
+                            ))
+                        .toList()),
+              if (widget.info.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Wrap(
+                    runSpacing: 6,
+                    children: [
+                      Text("추가 정보 : ",
+                          style: TextStyle(
+                              color: Color(0xFF555555), fontSize: 16)),
+                      Text(widget.info),
+                    ],
+                  ),
+                ),
+            ]),
+          Container(
+            width: double.infinity,
+            height: 1,
+            color: Color(0xFFDDDDDD),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BasicInfo extends StatelessWidget {
+  const BasicInfo({
+    super.key,
+    required this.imgUri,
+    required this.title,
+    required this.distance,
+    required this.address,
+    required this.telephone,
+  });
+
+  final String imgUri;
+  final String title;
+  final double distance;
+  final String address;
+  final String telephone;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
       height: 160,
-      decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: Color(0xFFDDDDDD)))),
       child: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Row(children: [
@@ -313,7 +394,7 @@ class RestaurantItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                        width: 155,
+                        width: 135,
                         child: Flexible(
                           child: Text(title,
                               style: TextStyle(
@@ -324,7 +405,7 @@ class RestaurantItem extends StatelessWidget {
                               )),
                         )),
                     SizedBox(
-                        child: Text(foodType,
+                        child: Text(distance.toString().substring(0, 3) + "km",
                             style: TextStyle(
                                 color: Color(0xFF797979),
                                 fontWeight: FontWeight.w500,
