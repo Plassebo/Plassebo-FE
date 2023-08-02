@@ -15,12 +15,9 @@ class Footer extends StatelessWidget {
     return SizedBox(
       height: 120,
       child: BottomNavigationBar(
-          currentIndex: selectedIndex,
+          currentIndex: selectedIndex == -1 ? 0 : selectedIndex,
           onTap: onItemTapped,
           items: <BottomNavigationBarItem>[
-            if (false)
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.abc), label: "it will be disappear..."),
             BottomNavigationBarItem(
               icon: Icon(Icons.account_circle_outlined),
               label: '내 정보',

@@ -28,21 +28,6 @@ class ContainerScreen extends StatefulWidget {
 }
 
 class _ContainerScreen extends State<ContainerScreen> {
-  int _selectedIndex = 0;
-
-  final List<Widget> _pages = [
-    ContainerScreen(),
-    ContainerScreen(),
-    MyInfo(),
-    Favorites(),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   PostNearByResponse data = PostNearByResponse();
 
   Image image = Image.network(
@@ -90,18 +75,10 @@ class _ContainerScreen extends State<ContainerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: Header(),
-      drawer: DrawerMenu(),
-      body: NearByScreen(
-          location: data.attractionName,
-          restaurantList: data.restaurants,
-          image: image),
-      bottomNavigationBar: Footer(
-          selectedIndex: _selectedIndex,
-          onItemTapped: _onItemTapped,
-          pages: _pages),
-    );
+    return NearByScreen(
+        location: data.attractionName,
+        restaurantList: data.restaurants,
+        image: image);
   }
 }
 
@@ -132,7 +109,7 @@ class NearByScreen extends StatelessWidget {
                       imgUri: rest['firstimage'] ??
                           "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg",
                       info: rest['info'] ?? "",
-                      time: rest['time'],
+                      time: rest['time'] ?? Map<String, dynamic>(),
                       distance: rest['distance']))
                   .toList(),
         )

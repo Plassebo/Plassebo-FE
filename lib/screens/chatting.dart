@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:plassebo_flutter/screens/favorites.dart';
+import 'package:plassebo_flutter/screens/myinfo.dart';
+import 'package:plassebo_flutter/screens/nearby.dart';
 import 'package:plassebo_flutter/widgets/header.dart';
 import 'package:plassebo_flutter/widgets/drawer_menu.dart';
 import 'package:plassebo_flutter/widgets/footer.dart';
@@ -20,17 +23,17 @@ class ContainerScreen extends StatefulWidget {
 }
 
 class _ContainerScreen extends State<ContainerScreen> {
-  int _selectedIndex = 0;
+  int _selectedIndex = -1;
 
   final List<Widget> _pages = [
-    ChattingScreen(),
-    ChattingScreen(),
-    Page1Screen(),
-    Page2Screen(),
+    MyInfo(),
+    NearBy(),
+    Favorites(),
   ];
 
   void _onItemTapped(int index) {
     setState(() {
+      debugPrint(index.toString());
       _selectedIndex = index;
     });
   }
@@ -40,7 +43,9 @@ class _ContainerScreen extends State<ContainerScreen> {
     return Scaffold(
         appBar: Header(),
         drawer: DrawerMenu(),
-        body: _pages[_selectedIndex],
+        body: _selectedIndex == -1
+            ? ChattingScreen()
+            : _pages.elementAt(_selectedIndex),
         bottomNavigationBar: Footer(
           onItemTapped: _onItemTapped,
           pages: _pages,
@@ -101,7 +106,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
                   angle: 0.8,
                   child: IconButton(
                       icon: Image.network(
-                        "https://s3-alpha-sig.figma.com/img/48ae/07a6/0facdf382e94bdcfad0d459a3f98cd84?Expires=1690761600&Signature=WiL9LUXu1vsKZRwywGPu~ILDNPn4cjQxN7lx094u1twevmHlDfq~sr77QZXbf8ByOzgPWYTYT4NFzP~TuQoAPzjxjVdT-4LtSUi2QoctHRYFNIVu4DZQqsqsWms6sjVCMaVH8tbTL2dL6CxPTTPopsfzhJn9OjfdGTlfEgOTH~ew8hyTtZEPx-hkBMf3CJDMq~6X~gPVCl65H0h0iry458Ovb-DTtRQw7RUHttFrZahsnOJxTfTlfCIdKFDoawkJE5PMe89AZ3UTPi-SWiXmLiyhsZ1nxeqKh-iXoPlfGFoOTPV5rBRZBOarxj8efQj40L66pBUNI5dDCn4Eobrtog__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
+                        "https://s3-alpha-sig.figma.com/img/48ae/07a6/0facdf382e94bdcfad0d459a3f98cd84?Expires=1691971200&Signature=Df81~cbTpwILKTb8Vuw2BVcc0dgOH02ckHWSYDHuSUm7F3PKHmL6PVeT4QGOOpwU6duh2cziVuUMIKDVNDNd1FZhJ7KD7l-uu8uDDLN4aXXXskfQRn2swdxgRxbR88wfGF01gn5ORHXZK8SiSnBXGBFPEPQca3c8k2Vzt~sqkZCUumtP22-nMqJEDfqemTzPAzUtXnHa~xV5kXaHi5L4GQhDbymQpKIUYydq8PrZqzRv16HG4BEvWMypOxpUhj-v-qWvwM0TRgt~Xc5kqdM0IwU1TqsGb2aPvVZrxpRVQIyMd87g0G9VJrBdTMjN3zmPSTa6zKPpb-FUsaHCmj3Biw__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
                         width: 25,
                         height: 25,
                         fit: BoxFit.fill,
@@ -218,26 +223,6 @@ class MyChat extends StatelessWidget {
               style: TextStyle(fontSize: 18, color: Color(0xFF292929))),
         )
       ],
-    );
-  }
-}
-
-// 페이지 1 화면
-class Page1Screen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('페이지 1'),
-    );
-  }
-}
-
-// 페이지 2 화면
-class Page2Screen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('페이지 2'),
     );
   }
 }
