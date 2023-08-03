@@ -3,7 +3,7 @@ import 'package:plassebo_flutter/widgets/footer.dart';
 import 'package:plassebo_flutter/widgets/header.dart';
 import 'package:plassebo_flutter/widgets/drawer_menu.dart';
 import 'dart:async';
-import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:naver_map_plugin/naver_map_plugin.dart';
 import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:geolocator/geolocator.dart';
 
@@ -62,6 +62,32 @@ class _ContainerScreen extends State<ContainerScreen> {
 
   void _showMyLocation() async {
     try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('위치 서비스를 활성화해주세요!')),
+        );
+        return;
+      }
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('위치 권한을 허용해주세요!')),
+          );
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('위치 권한이 영구적으로 거부되었습니다!')),
+        );
+        return;
+      }
+
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
@@ -72,6 +98,9 @@ class _ContainerScreen extends State<ContainerScreen> {
       });
     } catch (e) {
       print('위치를 가져오지 못했습니다: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('위치를 가져오지 못했습니다. 다시 시도해주세요!')),
+      );
     }
   }
 
