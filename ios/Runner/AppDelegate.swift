@@ -11,9 +11,22 @@ import FirebaseCore
   ) -> Bool {
     FirebaseApp.configure()
     GeneratedPluginRegistrant.register(with: self)
+    
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
+
 }
+// if (CLLocationManager.locationServicesEnabled()) {
+//   switch CLLocationManager.authorizationStatus() {
+//     case .denied, .notDetermined, .restricted:
+//         self.manager.requestAlwaysAuthorization()
+//         break
+//     default:
+//         break
+//     }
+// } 
+
+
 
 // @UIApplicationMain
 // class AppDelegate: UIResponder, UIApplicationDelegate {

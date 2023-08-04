@@ -164,10 +164,6 @@ class ChatContainer extends StatelessWidget {
 }
 
 class ChatTitle extends StatelessWidget {
-  const ChatTitle({
-    super.key,
-  });
-
   @override
   Widget build(BuildContext context) {
     return Center(

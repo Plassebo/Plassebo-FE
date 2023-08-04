@@ -324,7 +324,6 @@ class _RestaurantItemState extends State<RestaurantItem> {
 
 class BasicInfo extends StatelessWidget {
   const BasicInfo({
-    super.key,
     required this.imgUri,
     required this.title,
     required this.distance,
