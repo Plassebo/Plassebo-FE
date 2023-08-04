@@ -1,14 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:plassebo_flutter/data/model/post_nearby.dart';
 import 'package:plassebo_flutter/data/provider/request.dart';
-import 'package:plassebo_flutter/widgets/header.dart';
-import 'package:plassebo_flutter/widgets/footer.dart';
-import 'package:plassebo_flutter/widgets/drawer_menu.dart';
-import 'package:plassebo_flutter/screens/myinfo.dart';
-import 'package:plassebo_flutter/screens/favorites.dart';
 
 import 'package:extended_image/extended_image.dart';
 import 'dart:io';
@@ -44,8 +36,8 @@ class _ContainerScreen extends State<ContainerScreen> {
     // final XFile? pickedFile =
     //     await picker.pickImage(source: ImageSource.gallery);
     try {
-      final XFile? photo =
-          await picker.pickImage(source: ImageSource.camera, imageQuality: 90);
+      final XFile? photo = await picker.pickImage(source: ImageSource.gallery);
+      // await picker.pickImage(source: ImageSource.camera, imageQuality: 90);
       // 카메라로 찍어서
       if (photo != null) {
         return photo.path;

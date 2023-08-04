@@ -122,9 +122,10 @@ class _ChattingScreenState extends State<ChattingScreen> {
   }
 
   void _handleSubmitted() {
+    debugPrint("handle submit");
     FirebaseFirestore.instance.collection('chat').add(
         {'text': _userEnteredMessage, 'time': Timestamp.now(), 'isUser': true});
-    debugPrint("get response");
+
     getResponse(_userEnteredMessage);
     _textController.clear();
   }
@@ -187,7 +188,7 @@ class BotChat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Wrap(
       children: [
         Container(
             decoration: BoxDecoration(
@@ -209,8 +210,8 @@ class MyChat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+    return Wrap(
+      alignment: WrapAlignment.end,
       children: [
         Container(
           decoration: BoxDecoration(

@@ -7,10 +7,21 @@ import 'package:plassebo_flutter/screens/signUp.dart';
 
 import 'package:plassebo_flutter/screens/chatting.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  var currentFire = await FirebaseFirestore.instance.collection('chat').get();
+  for (var item in currentFire.docs) {
+    await item.reference.delete();
+  }
+  FirebaseFirestore.instance.collection('chat').add({
+    'text': "안녕하세요, 부산 알리미 입니다.\n원하시는 가게의 상호명을 입력해주세요!",
+    'time': Timestamp.now(),
+    'isUser': false
+  });
   runApp(MyApp());
 }
 
@@ -113,26 +124,6 @@ class MainScreen extends StatelessWidget {
                 },
                 child: Text(
                   '임시 채팅 이동 버튼',
-                  style: TextStyle(fontSize: 15),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 94, 94, 94),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-            SizedBox(
-              width: 160,
-              height: 30,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/nearby');
-                },
-                child: Text(
-                  '임시 근처 맛집 이동',
                   style: TextStyle(fontSize: 15),
                 ),
                 style: ElevatedButton.styleFrom(
