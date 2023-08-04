@@ -1,14 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:plassebo_flutter/data/model/post_nearby.dart';
-
-Future<http.Response> post(String uri, Map<String, dynamic> data) async {
-  final parseUri = Uri.parse(uri);
-  final res = await http.post(parseUri, body: data);
-  return res;
-}
 
 void postMultipart(File img, String uri, Function setData) async {
   final parseUri = Uri.parse(uri);
@@ -20,4 +15,17 @@ void postMultipart(File img, String uri, Function setData) async {
   // debugPrint(result.body);
   final data = PostNearByResponse.fromJson(jsonDecode(result.body));
   setData(data);
+}
+
+Future<String> postQuestions(String uri, Map<String, String> data) async {
+  debugPrint(jsonEncode(data).toString());
+  final parseUri = Uri.parse(uri);
+  debugPrint(parseUri.toString());
+
+  final res = await http.post(parseUri,
+      headers: {'Content-Type': 'application/json;charset=UTF-8'},
+      body: jsonEncode(data));
+  debugPrint(res.body);
+
+  return res.body;
 }

@@ -111,8 +111,11 @@ class _ChattingScreenState extends State<ChattingScreen> {
                         height: 25,
                         fit: BoxFit.fill,
                       ),
-                      onPressed: _userEnteredMessage.trim().isEmpty
-                          ? null
+                      onPressed: _userEnteredMessage.isEmpty
+                          ? () {
+                              debugPrint(_userEnteredMessage.trim());
+                              debugPrint("enter something");
+                            }
                           : _handleSubmitted),
                 ))
           ],
