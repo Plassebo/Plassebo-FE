@@ -113,8 +113,12 @@ class _ContainerScreen extends State<ContainerScreen> {
   }
 
   final _pages = [
-    NearBy(),
-    NearBy(),
+    NearBy(
+      isCamera: false,
+    ),
+    NearBy(
+      isCamera: true,
+    ),
     Chatting(),
   ];
 
