@@ -23,34 +23,9 @@ class ContainerScreen extends StatefulWidget {
 }
 
 class _ContainerScreen extends State<ContainerScreen> {
-  int _selectedIndex = -1;
-
-  final List<Widget> _pages = [
-    MyInfo(),
-    NearBy(),
-    Favorites(),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      debugPrint(index.toString());
-      _selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: Header(),
-        drawer: DrawerMenu(),
-        body: _selectedIndex == -1
-            ? ChattingScreen()
-            : _pages.elementAt(_selectedIndex),
-        bottomNavigationBar: Footer(
-          onItemTapped: _onItemTapped,
-          pages: _pages,
-          selectedIndex: _selectedIndex,
-        ));
+    return ChattingScreen();
   }
 }
 

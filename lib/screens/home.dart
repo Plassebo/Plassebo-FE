@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:plassebo_flutter/screens/chatting.dart';
+import 'package:plassebo_flutter/screens/nearby.dart';
 import 'package:plassebo_flutter/widgets/footer.dart';
 import 'package:plassebo_flutter/widgets/header.dart';
 import 'package:plassebo_flutter/widgets/drawer_menu.dart';
@@ -26,7 +28,7 @@ class ContainerScreen extends StatefulWidget {
 }
 
 class _ContainerScreen extends State<ContainerScreen> {
-  int _selectedIndex = 0;
+  int _selectedIndex = -1;
   Completer<NaverMapController> _controller = Completer();
   MapType _mapType = MapType.Basic;
 
@@ -110,85 +112,92 @@ class _ContainerScreen extends State<ContainerScreen> {
     super.dispose();
   }
 
+  final _pages = [
+    NearBy(),
+    NearBy(),
+    Chatting(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(),
       drawer: DrawerMenu(),
-      body: Stack(
-        children: [
-          NaverMap(
-            onMapCreated: (controller) {
-              _controller.complete(controller);
-            },
-            mapType: _mapType,
-            markers: _buildMarkers(),
-          ),
-          Positioned(
-            top: 16,
-            left: 16,
-            right: 16,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 3)],
-              ),
-              child: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: '위치 검색',
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  border: InputBorder.none,
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: _searchLocation,
+      body: _selectedIndex == -1
+          ? Stack(
+              children: [
+                NaverMap(
+                  onMapCreated: (controller) {
+                    _controller.complete(controller);
+                  },
+                  mapType: _mapType,
+                  markers: _buildMarkers(),
+                ),
+                Positioned(
+                  top: 16,
+                  left: 16,
+                  right: 16,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 3)],
+                    ),
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: '위치 검색',
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        border: InputBorder.none,
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.search),
+                          onPressed: _searchLocation,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ),
-          if (_searchResults.isNotEmpty)
-            Positioned(
-              top: 70,
-              left: 16,
-              right: 16,
+                if (_searchResults.isNotEmpty)
+                  Positioned(
+                    top: 70,
+                    left: 16,
+                    right: 16,
+                    child: Container(
+                      color: Colors.white,
+                      child: ListView.builder(
+                        itemCount: _searchResults.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text(
+                                '위도: ${_searchResults[index].latitude}, 경도: ${_searchResults[index].longitude}'),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+              ],
+            )
+          : _pages.elementAt(_selectedIndex),
+      floatingActionButton: _selectedIndex == -1
+          ? InkWell(
+              onTap: _showMyLocation,
               child: Container(
-                color: Colors.white,
-                child: ListView.builder(
-                  itemCount: _searchResults.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(
-                          '위도: ${_searchResults[index].latitude}, 경도: ${_searchResults[index].longitude}'),
-                    );
-                  },
+                width: 45,
+                height: 45,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xFF4A7DFF),
+                  boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 3)],
                 ),
+                child: Icon(Icons.my_location, size: 22, color: Colors.white),
               ),
-            ),
-        ],
-      ),
-      floatingActionButton: InkWell(
-        onTap: _showMyLocation,
-        child: Container(
-          width: 45,
-          height: 45,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Color(0xFF4A7DFF),
-            boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 3)],
-          ),
-          child: Icon(Icons.my_location, size: 22, color: Colors.white),
-        ),
-      ),
+            )
+          : null,
       bottomNavigationBar: Footer(
         onItemTapped: _onItemTapped,
-        pages: [
-          HomeScreen(),
-          ContainerScreen(),
-        ],
+        pages: _pages,
         selectedIndex: _selectedIndex,
       ),
     );
