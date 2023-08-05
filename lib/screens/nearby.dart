@@ -8,18 +8,26 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
 class NearBy extends StatelessWidget {
+  final bool isCamera;
+  const NearBy({
+    required this.isCamera,
+  });
   @override
   Widget build(BuildContext context) {
-    return ContainerScreen();
+    return ContainerScreen(isCamera: isCamera);
   }
 }
 
 class ContainerScreen extends StatefulWidget {
+  final bool isCamera;
+  const ContainerScreen({required this.isCamera});
   @override
-  _ContainerScreen createState() => _ContainerScreen();
+  _ContainerScreen createState() => _ContainerScreen(isCamera: isCamera);
 }
 
 class _ContainerScreen extends State<ContainerScreen> {
+  final bool isCamera;
+  _ContainerScreen({required this.isCamera});
   PostNearByResponse data = PostNearByResponse();
 
   Image image = Image.network(
@@ -35,9 +43,14 @@ class _ContainerScreen extends State<ContainerScreen> {
     final ImagePicker picker = ImagePicker();
     // final XFile? pickedFile =
     //     await picker.pickImage(source: ImageSource.gallery);
+    XFile? photo = null;
     try {
-      final XFile? photo = await picker.pickImage(source: ImageSource.gallery);
-      // await picker.pickImage(source: ImageSource.camera, imageQuality: 90);
+      if (isCamera) {
+        photo = await picker.pickImage(source: ImageSource.camera);
+      } else {
+        photo = await picker.pickImage(source: ImageSource.gallery);
+      }
+
       // 카메라로 찍어서
       if (photo != null) {
         return photo.path;
@@ -51,7 +64,12 @@ class _ContainerScreen extends State<ContainerScreen> {
 
   void takePicture() async {
     final String filePath = await pickAndUploadImage();
-    postMultipart(File(filePath), "http://34.22.67.47:8080/images", setData);
+    if (filePath == "") {
+      Navigator.pushNamed(context, "/home");
+      return;
+    }
+    postMultipart(
+        File(filePath), "http://34.22.67.47:8080/images", setData, context);
     setState(() {
       image = Image.file(File(filePath),
           width: 180, height: 160, fit: BoxFit.cover);
