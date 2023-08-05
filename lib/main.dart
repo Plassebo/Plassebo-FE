@@ -34,8 +34,8 @@ class MyApp extends StatelessWidget {
         '/login': (context) => Login(),
         '/signUp': (context) => SignUp(),
         '/home': (context) => Home(),
+        '/nearby': (context) => NearBy(isCamera: true),
         '/chatting': (context) => Chatting(),
-        '/nearby': (context) => NearBy()
       },
     );
   }

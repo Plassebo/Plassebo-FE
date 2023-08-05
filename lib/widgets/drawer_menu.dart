@@ -30,7 +30,7 @@ class DrawerMenu extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  '사용자 프로필',
+                  '부산 알리미',
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.white,
@@ -42,23 +42,23 @@ class DrawerMenu extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.home),
-            title: Text('홈'),
+            title: Text('홈 화면'),
             onTap: () {
-              Navigator.pushNamed(context, '/');
+              Navigator.pushNamed(context, '/home');
             },
           ),
           ListTile(
-            leading: Icon(Icons.pageview),
-            title: Text('페이지 1'),
+            leading: Icon(Icons.photo_outlined),
+            title: Text('주변 맛집 리스트'),
             onTap: () {
-              Navigator.pushNamed(context, '/page1');
+              Navigator.pushNamed(context, '/nearby');
             },
           ),
           ListTile(
-            leading: Icon(Icons.pageview),
-            title: Text('페이지 2'),
+            leading: Icon(Icons.mark_chat_unread_outlined),
+            title: Text('부알봇 채팅'),
             onTap: () {
-              Navigator.pushNamed(context, '/page2');
+              Navigator.pushNamed(context, '/chatting');
             },
           ),
         ],
