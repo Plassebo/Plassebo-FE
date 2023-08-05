@@ -1,10 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:plassebo_flutter/screens/favorites.dart';
-import 'package:plassebo_flutter/screens/myinfo.dart';
-import 'package:plassebo_flutter/screens/nearby.dart';
-import 'package:plassebo_flutter/widgets/header.dart';
-import 'package:plassebo_flutter/widgets/drawer_menu.dart';
-import 'package:plassebo_flutter/widgets/footer.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -86,12 +80,13 @@ class _ChattingScreenState extends State<ChattingScreen> {
                         height: 25,
                         fit: BoxFit.fill,
                       ),
-                      onPressed: _userEnteredMessage.isEmpty
-                          ? () {
-                              debugPrint(_userEnteredMessage.trim());
-                              debugPrint("enter something");
-                            }
-                          : _handleSubmitted),
+                      onPressed: //_userEnteredMessage.isEmpty
+                          // ? () {
+                          //     debugPrint(_userEnteredMessage.trim());
+                          //     debugPrint("enter something");
+                          //   }
+                          // :
+                          _handleSubmitted),
                 ))
           ],
         ),
@@ -101,6 +96,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
 
   void _handleSubmitted() {
     debugPrint("handle submit");
+    debugPrint(_userEnteredMessage);
     FirebaseFirestore.instance.collection('chat').add(
         {'text': _userEnteredMessage, 'time': Timestamp.now(), 'isUser': true});
 

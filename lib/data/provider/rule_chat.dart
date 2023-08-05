@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:plassebo_flutter/data/provider/request.dart';
 
 String responseText = '';
@@ -40,6 +39,7 @@ Map<String, List<String>> keywordsDict = {
 };
 
 void getResponse(String inputString) async {
+  bool isRestaurant = false;
   List<String> restaurants = [];
   String type = "";
 
@@ -74,30 +74,29 @@ void getResponse(String inputString) async {
     }
   }
 
-  FirebaseFirestore.instance
-      .collection('restaurants')
-      .get()
-      .then((querySnapshot) {
-    // restaurants.clear();
+  var querySnapshot =
+      await FirebaseFirestore.instance.collection('restaurants').get();
 
-    querySnapshot.docs.forEach((doc) {
-      String data = doc['name'];
-      restaurants.add(data);
-    });
+  // restaurants.clear();
 
-    for (final r in restaurants) {
-      if (inputString.contains(r)) {
-        restName = r;
-        FirebaseFirestore.instance.collection("chat").add({
-          'text':
-              "${restName}의 어떤 정보를 원하시나요?\n\n번호나 형식으로 입력해주세요!\n\n1. 주소\n2. 매장 번호\n3. 영업 시간\n4. 가격\n5. 추가 정보(기타)",
-          'time': Timestamp.now(),
-          'isUser': false
-        });
-        break;
-      }
-    }
+  querySnapshot.docs.forEach((doc) {
+    String data = doc['name'];
+    restaurants.add(data);
   });
+
+  for (final r in restaurants) {
+    if (inputString.contains(r)) {
+      restName = r;
+      FirebaseFirestore.instance.collection("chat").add({
+        'text':
+            "${restName}의 어떤 정보를 원하시나요?\n\n번호나 형식으로 입력해주세요!\n\n1. 주소\n2. 매장 번호\n3. 영업 시간\n4. 가격\n5. 추가 정보(기타)",
+        'time': Timestamp.now(),
+        'isUser': false
+      });
+      isRestaurant = true;
+      break;
+    }
+  }
 
   List<String> matchedIntent = [];
   List<String> key = [];
@@ -115,11 +114,23 @@ void getResponse(String inputString) async {
       key.add(mi);
     }
   }
+  if (key.isEmpty && !isRestaurant) {
+    key.add("fallback");
+  }
   for (var k in key) {
     setType(k);
     if (k == "greet" || k == "fallback") {
       FirebaseFirestore.instance.collection("chat").add(
           {'text': responseText, 'time': Timestamp.now(), 'isUser': false});
+      restName = "";
+      break;
+    }
+    if (restName.isEmpty) {
+      FirebaseFirestore.instance.collection("chat").add({
+        'text': "없는 정보입니다. 알고 싶은 가게의 이름을 입력해주세요!",
+        'time': Timestamp.now(),
+        'isUser': false
+      });
       restName = "";
       break;
     }
