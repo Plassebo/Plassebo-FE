@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
 
 // 드로어 메뉴 위젯
-class DrawerMenu extends StatelessWidget {
+class DrawerMenu extends StatefulWidget {
+  final Function(int) onItemTapped;
+
+  DrawerMenu({required this.onItemTapped});
+  @override
+  State<DrawerMenu> createState() =>
+      _DrawerMenuState(onItemTapped: onItemTapped);
+}
+
+class _DrawerMenuState extends State<DrawerMenu> {
+  final Function(int) onItemTapped;
+
+  _DrawerMenuState({required this.onItemTapped});
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -44,21 +57,24 @@ class DrawerMenu extends StatelessWidget {
             leading: Icon(Icons.home),
             title: Text('홈 화면'),
             onTap: () {
-              Navigator.pushNamed(context, '/home');
+              onItemTapped(-1);
+              Navigator.pop(context);
             },
           ),
           ListTile(
             leading: Icon(Icons.photo_outlined),
             title: Text('주변 맛집 리스트'),
             onTap: () {
-              Navigator.pushNamed(context, '/nearby');
+              onItemTapped(1);
+              Navigator.pop(context);
             },
           ),
           ListTile(
             leading: Icon(Icons.mark_chat_unread_outlined),
             title: Text('부알봇 채팅'),
             onTap: () {
-              Navigator.pushNamed(context, '/chatting');
+              onItemTapped(2);
+              Navigator.pop(context);
             },
           ),
         ],

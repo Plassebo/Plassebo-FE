@@ -126,13 +126,17 @@ class _ContainerScreen extends State<ContainerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(),
-      drawer: DrawerMenu(),
+      drawer: DrawerMenu(
+        onItemTapped: _onItemTapped,
+      ),
       body: _selectedIndex == -1
           ? Stack(
               children: [
                 NaverMap(
                   onMapCreated: (controller) {
-                    _controller.complete(controller);
+                    if (!_controller.isCompleted) {
+                      _controller.complete(controller);
+                    }
                   },
                   mapType: _mapType,
                   markers: _buildMarkers(),
