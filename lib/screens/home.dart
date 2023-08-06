@@ -45,7 +45,7 @@ class _ContainerScreen extends State<ContainerScreen> {
 
     if (query.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('검색창에 위치를 입력해주세요!')),
+        SnackBar(content: Text('검색창에 위치를 입력해주세요.')),
       );
       return;
     }
@@ -65,7 +65,7 @@ class _ContainerScreen extends State<ContainerScreen> {
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('위치 서비스를 활성화해주세요!')),
+          SnackBar(content: Text('위치 서비스를 활성화해주세요.')),
         );
         return;
       }
@@ -75,7 +75,7 @@ class _ContainerScreen extends State<ContainerScreen> {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('위치 권한을 허용해주세요!')),
+            SnackBar(content: Text('위치 권한을 허용해주세요.')),
           );
           return;
         }
@@ -83,7 +83,7 @@ class _ContainerScreen extends State<ContainerScreen> {
 
       if (permission == LocationPermission.deniedForever) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('위치 권한이 영구적으로 거부되었습니다!')),
+          SnackBar(content: Text('위치 권한이 영구적으로 거부되었습니다.')),
         );
         return;
       }
@@ -99,7 +99,7 @@ class _ContainerScreen extends State<ContainerScreen> {
     } catch (e) {
       print('위치를 가져오지 못했습니다: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('위치를 가져오지 못했습니다. 다시 시도해주세요!')),
+        SnackBar(content: Text('위치를 가져오지 못했습니다. 다시 시도해주세요.')),
       );
     }
   }
@@ -137,7 +137,7 @@ class _ContainerScreen extends State<ContainerScreen> {
               child: TextField(
                 controller: _searchController,
                 decoration: InputDecoration(
-                  hintText: '위치 검색',
+                  hintText: '위치를 검색하세요.',
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   border: InputBorder.none,
