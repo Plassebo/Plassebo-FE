@@ -288,56 +288,55 @@ class _RestaurantItemState extends State<RestaurantItem> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          isPressed = !isPressed;
-        });
-      },
-      child: Column(
-        children: [
-          BasicInfo(
-              imgUri: widget.imgUri,
-              title: widget.title,
-              distance: widget.distance,
-              address: widget.address,
-              telephone: widget.telephone),
-          if (isPressed && (widget.time.isNotEmpty || widget.info.isNotEmpty))
-            Column(children: [
-              if (widget.time.isNotEmpty)
-                ExpansionTile(
-                    title: Text("영업 시간"),
-                    children: widget.time.entries
-                        .map((e) => Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Wrap(runSpacing: 4, children: [
-                                Text(e.key),
-                                Text(" : "),
-                                Text(e.value)
-                              ]),
-                            ))
-                        .toList()),
-              if (widget.info.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Wrap(
-                    runSpacing: 6,
-                    children: [
-                      Text("추가 정보 : ",
-                          style: TextStyle(
-                              color: Color(0xFF555555), fontSize: 16)),
-                      Text(widget.info),
-                    ],
-                  ),
+    return Column(
+      children: [
+        GestureDetector(
+            onTap: () {
+              setState(() {
+                isPressed = !isPressed;
+              });
+            },
+            child: BasicInfo(
+                imgUri: widget.imgUri,
+                title: widget.title,
+                distance: widget.distance,
+                address: widget.address,
+                telephone: widget.telephone)),
+        if (isPressed && (widget.time.isNotEmpty || widget.info.isNotEmpty))
+          Column(children: [
+            if (widget.time.isNotEmpty)
+              ExpansionTile(
+                  title: Text("영업 시간"),
+                  children: widget.time.entries
+                      .map((e) => Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Wrap(runSpacing: 4, children: [
+                              Text(e.key),
+                              Text(" : "),
+                              Text(e.value)
+                            ]),
+                          ))
+                      .toList()),
+            if (widget.info.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Wrap(
+                  runSpacing: 6,
+                  children: [
+                    Text("추가 정보 : ",
+                        style:
+                            TextStyle(color: Color(0xFF555555), fontSize: 16)),
+                    Text(widget.info),
+                  ],
                 ),
-            ]),
-          Container(
-            width: double.infinity,
-            height: 1,
-            color: Color(0xFFDDDDDD),
-          ),
-        ],
-      ),
+              ),
+          ]),
+        Container(
+          width: double.infinity,
+          height: 1,
+          color: Color(0xFFDDDDDD),
+        ),
+      ],
     );
   }
 }
@@ -360,6 +359,7 @@ class BasicInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
+      width: 550,
       height: 160,
       child: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -381,31 +381,34 @@ class BasicInfo extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
+                    Flexible(
+                      child: SizedBox(
                         width: 135,
-                        child: Flexible(
-                          child: Text(title,
-                              style: TextStyle(
-                                color: Color(0xFF515151),
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20,
-                                overflow: TextOverflow.ellipsis,
-                              )),
-                        )),
+                        child: Text(title,
+                            style: TextStyle(
+                              color: Color(0xFF515151),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 20,
+                              overflow: TextOverflow.ellipsis,
+                            )),
+                      ),
+                    ),
                     SizedBox(
-                        child: Text(distance.toString().substring(0, 3) + "km",
+                        width: 60,
+                        child: Text("${distance.toString().substring(0, 3)}km",
                             style: TextStyle(
                                 color: Color(0xFF797979),
                                 fontWeight: FontWeight.w500,
-                                fontSize: 18)))
+                                fontSize: 18))),
                   ],
                 ),
                 SizedBox(
                   height: 30,
                 ),
-                SizedBox(
-                  width: 190,
-                  child: Flexible(
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: SizedBox(
+                    width: 190,
                     child: Text(
                       address,
                       style: TextStyle(
@@ -416,14 +419,17 @@ class BasicInfo extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text(telephone,
-                    style: TextStyle(
-                        color: Color(0xFF797979),
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16))
+                SizedBox(
+                  width: 190,
+                  child: Text(telephone,
+                      style: TextStyle(
+                          color: Color(0xFF797979),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16)),
+                )
               ],
             ),
-          )
+          ),
         ]),
       ),
     );
