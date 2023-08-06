@@ -64,7 +64,9 @@ class _ContainerScreen extends State<ContainerScreen> {
 
   void takePicture() async {
     final String filePath = await pickAndUploadImage();
-    if (filePath == "") {
+    debugPrint(filePath);
+    if (filePath.isEmpty) {
+      debugPrint("empty");
       Navigator.pushNamed(context, "/home");
       return;
     }

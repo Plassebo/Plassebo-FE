@@ -20,8 +20,6 @@ void postMultipart(
     setData(data);
   } catch (e) {
     debugPrint("e");
-  } finally {
-    Navigator.pushNamed(context, "/home");
   }
 }
 
