@@ -172,14 +172,17 @@ class _ContainerScreen extends State<ContainerScreen> {
                     left: 16,
                     right: 16,
                     child: Container(
-                      color: Colors.white,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                      ),
                       child: ListView.builder(
                         itemCount: _searchResults.length,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           return ListTile(
                             title: Text(
-                                '위도: ${_searchResults[index].latitude}, 경도: ${_searchResults[index].longitude}'),
+                                '위도: ${_searchResults[index].latitude.toString().substring(0, 5)}, 경도: ${_searchResults[index].longitude.toString().substring(0, 5)}'),
                           );
                         },
                       ),
@@ -216,7 +219,7 @@ class _ContainerScreen extends State<ContainerScreen> {
       return Marker(
         markerId: DateTime.now().toIso8601String(),
         position: location,
-        captionText: '검색 결과',
+        captionText: '현재 위치',
       );
     }).toList();
   }

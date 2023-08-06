@@ -6,10 +6,13 @@ import 'package:plassebo_flutter/screens/nearby.dart';
 import 'package:plassebo_flutter/screens/chatting.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  await dotenv.load(fileName: 'assets/config/.env');
 
   var currentFire = await FirebaseFirestore.instance.collection('chat').get();
   for (var item in currentFire.docs) {
