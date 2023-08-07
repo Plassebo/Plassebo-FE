@@ -112,7 +112,23 @@ class NearByScreen extends StatelessWidget {
         RestaurantContainer(
           location: location,
           restaurantList: restaurantList.isEmpty
-              ? [Text("주변 맛집이 없습니다.")]
+              ? [
+                  Center(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                        SizedBox(
+                          height: 150,
+                        ),
+                        Text(
+                          "주변 맛집이 없습니다.",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF999999)),
+                        )
+                      ]))
+                ]
               : restaurantList
                   .map((rest) => RestaurantItem(
                       title: rest['title'],
