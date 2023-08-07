@@ -31,7 +31,10 @@ class _ContainerScreen extends State<ContainerScreen> {
   PostNearByResponse data = PostNearByResponse();
 
   Image image = Image.network(
-      "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg");
+      "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg",
+      width: 180,
+      height: 160,
+      fit: BoxFit.cover);
 
   void setData(PostNearByResponse model) {
     setState(() {
@@ -112,7 +115,23 @@ class NearByScreen extends StatelessWidget {
         RestaurantContainer(
           location: location,
           restaurantList: restaurantList.isEmpty
-              ? [Text("주변 맛집이 없습니다.")]
+              ? [
+                  Center(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                        SizedBox(
+                          height: 150,
+                        ),
+                        Text(
+                          "주변 맛집이 없습니다.",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF999999)),
+                        )
+                      ]))
+                ]
               : restaurantList
                   .map((rest) => RestaurantItem(
                       title: rest['title'],

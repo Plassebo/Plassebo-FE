@@ -36,7 +36,7 @@ class Footer extends StatelessWidget {
                 label: ''),
             BottomNavigationBarItem(
               icon: Icon(Icons.mark_chat_unread_outlined),
-              label: '부알봇',
+              label: '끼룩봇',
             ),
           ],
           backgroundColor: Color(0xFFFFFFFF),

@@ -46,51 +46,43 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  bool _visible = true;
+  @override
+  void initState() {
+    Future.delayed(const Duration(milliseconds: 3000), () {
+      setState(() {
+        _visible = false;
+      });
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        Navigator.pushNamed(context, '/home');
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              '부산 알리미',
-              style: TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF4A7DFF),
-              ),
+      body: AnimatedOpacity(
+        opacity: _visible ? 1.0 : 0.0,
+        duration: Duration(milliseconds: 1000),
+        child: Container(
+          color: Color(0xFFFFFFFF),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/main_logo.png",
+                )
+              ],
             ),
-            SizedBox(height: 50),
-            Text(
-              '이미지 분류, 룰베이스 챗봇 기반 부산 맛집 정보 관광 앱',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFFDDDDDD),
-              ),
-            ),
-            SizedBox(
-              width: 160,
-              height: 30,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/home');
-                },
-                child: Text(
-                  '임시 메인 이동 버튼',
-                  style: TextStyle(fontSize: 15),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 94, 94, 94),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
