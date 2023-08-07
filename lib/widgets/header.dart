@@ -5,7 +5,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(
-        '부산알리미',
+        '끼룩',
         style: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,

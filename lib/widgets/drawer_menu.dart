@@ -71,7 +71,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
           ),
           ListTile(
             leading: Icon(Icons.mark_chat_unread_outlined),
-            title: Text('부알봇 채팅'),
+            title: Text('끼룩봇 채팅'),
             onTap: () {
               onItemTapped(2);
               Navigator.pop(context);
