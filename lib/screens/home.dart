@@ -219,7 +219,7 @@ class _ContainerScreen extends State<ContainerScreen> {
       return Marker(
         markerId: DateTime.now().toIso8601String(),
         position: location,
-        captionText: '현재 위치',
+        captionText: '검색 위치',
       );
     }).toList();
   }
