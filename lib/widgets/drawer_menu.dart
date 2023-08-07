@@ -43,7 +43,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  '부산 알리미',
+                  '부산 끼니 룩북, 끼룩',
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.white,
