@@ -15,15 +15,14 @@ class Footer extends StatelessWidget {
     return SizedBox(
       height: 120,
       child: BottomNavigationBar(
-          currentIndex: selectedIndex,
+          currentIndex: selectedIndex == -1 ? 0 : selectedIndex,
           onTap: onItemTapped,
           items: <BottomNavigationBarItem>[
-            if (false)
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.abc), label: "it will be disappear..."),
             BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle_outlined),
-              label: '내 정보',
+              icon: Icon(
+                Icons.photo_outlined,
+              ),
+              label: '사진 선택',
             ),
             BottomNavigationBarItem(
                 backgroundColor: Color(0xFF4A7DFF),
@@ -36,8 +35,8 @@ class Footer extends StatelessWidget {
                 ),
                 label: ''),
             BottomNavigationBarItem(
-              icon: Icon(Icons.star_border_outlined),
-              label: '즐겨찾기',
+              icon: Icon(Icons.mark_chat_unread_outlined),
+              label: '부알봇',
             ),
           ],
           backgroundColor: Color(0xFFFFFFFF),
