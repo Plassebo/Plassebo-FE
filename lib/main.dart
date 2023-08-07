@@ -70,30 +70,18 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: AnimatedOpacity(
         opacity: _visible ? 1.0 : 0.0,
-        // 애미메이션 효과에 소요되는 시간 설정
         duration: Duration(milliseconds: 1000),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '끼룩',
-                style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF4A7DFF),
-                ),
-              ),
-              SizedBox(height: 50),
-              Text(
-                '부산 끼니 맛집 룩북, 끼룩',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFDDDDDD),
-                ),
-              ),
-            ],
+        child: Container(
+          color: Color(0xFFFFFFFF),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/main_logo.png",
+                )
+              ],
+            ),
           ),
         ),
       ),
