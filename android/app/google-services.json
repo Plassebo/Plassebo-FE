@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "822583866148",
+    "project_id": "plassebo-chat",
+    "storage_bucket": "plassebo-chat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:822583866148:android:bab1013600675e2a0db9b1",
+        "android_client_info": {
+          "package_name": "com.example.plassebo_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "822583866148-4b2k38uo1johr4m4dj6t577c6lemm5lg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.plassebo_flutter",
+            "certificate_hash": "5b25360fd0f27c64c8e2a0c3e9593e4d5fce1710"
+          }
+        },
+        {
+          "client_id": "822583866148-gta68c2qqfaos7vf7j3v463l3ldocjns.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYalm35zV_Qai0GaW8wp1GVO8PtvtZpkI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "822583866148-gta68c2qqfaos7vf7j3v463l3ldocjns.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "822583866148-m6hco316n5lun19l6tcp2mlq9veqa02n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nayool.plasseboFlutter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

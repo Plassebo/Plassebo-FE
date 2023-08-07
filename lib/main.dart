@@ -10,20 +10,25 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  try {
+    await Firebase.initializeApp();
+    // await dotenv.load(fileName: 'assets/config/.env');
 
-  await dotenv.load(fileName: 'assets/config/.env');
+    var currentFire = await FirebaseFirestore.instance.collection('chat').get();
+    for (var item in currentFire.docs) {
+      await item.reference.delete();
+    }
 
-  var currentFire = await FirebaseFirestore.instance.collection('chat').get();
-  for (var item in currentFire.docs) {
-    await item.reference.delete();
+    FirebaseFirestore.instance.collection('chat').add({
+      'text': "안녕하세요, 부산 알리미 입니다.\n원하시는 가게의 상호명을 입력해주세요!",
+      'time': Timestamp.now(),
+      'isUser': false
+    });
+
+    runApp(MyApp());
+  } catch (e) {
+    print("Firebase initialization error: $e");
   }
-  FirebaseFirestore.instance.collection('chat').add({
-    'text': "안녕하세요, 부산 알리미 입니다.\n원하시는 가게의 상호명을 입력해주세요!",
-    'time': Timestamp.now(),
-    'isUser': false
-  });
-  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
