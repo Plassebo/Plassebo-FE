@@ -173,7 +173,7 @@ class _ContainerScreen extends State<ContainerScreen> {
                     right: 16,
                     child: Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
+                        // borderRadius: BorderRadius.circular(10),
                         color: Colors.white,
                       ),
                       child: ListView.builder(

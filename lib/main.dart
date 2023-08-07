@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: MainScreen(),
+      debugShowCheckedModeBanner: false,
       routes: {
         '/home': (context) => Home(),
         '/nearby': (context) => NearBy(isCamera: true),
