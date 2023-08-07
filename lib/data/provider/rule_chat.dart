@@ -35,7 +35,8 @@ Map<String, List<String>> keywordsDict = {
   "time": ["영업시간", "영업", "시간", "운영시간", "운영", "오픈", "마감", "3"],
   "phone": ["번호", "매장번호", "전화", "2"],
   "address": ["주소", "위치", "어디", "어딘지", "1"],
-  "etc": ["기타", "추가 정보", "추가", "정보", "5"]
+  "etc": ["기타", "추가 정보", "추가", "정보", "5"],
+  "bye": ["고마워", "잘있어", "잘 있어", "잘 지내", "잘지내", "ㄱㅅ", '땡큐']
 };
 
 void getResponse(String inputString) async {
@@ -63,6 +64,10 @@ void getResponse(String inputString) async {
 
       case "address":
         type = "주소";
+        break;
+
+      case "bye":
+        responseText = "감사합니다. 즐거운 여행 되세요!";
         break;
 
       case "etc":
@@ -119,7 +124,7 @@ void getResponse(String inputString) async {
   }
   for (var k in key) {
     setType(k);
-    if (k == "greet" || k == "fallback") {
+    if (k == "greet" || k == "fallback" || k == "bye") {
       FirebaseFirestore.instance.collection("chat").add(
           {'text': responseText, 'time': Timestamp.now(), 'isUser': false});
       restName = "";
