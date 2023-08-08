@@ -8,6 +8,19 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+Future<void> _clearCache() async {
+  // Clear cache using the flutter_cache_manager package
+  await DefaultCacheManager().emptyCache();
+}
+
+Future<void> _clearData() async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.clear(); // Clears all data stored using shared_preferences
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
@@ -24,6 +37,8 @@ void main() async {
       'time': Timestamp.now(),
       'isUser': false
     });
+    _clearCache();
+    _clearData();
 
     runApp(MyApp());
   } catch (e) {
