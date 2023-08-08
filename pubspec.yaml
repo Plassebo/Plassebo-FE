@@ -49,6 +49,9 @@ dependencies:
   flutter_dotenv: ^5.0.2
   flutter_config: ^2.0.2
   firebase_core: ^2.15.0
+  flutter_cache_manager: ^3.3.1
+  shared_preferences: ^2.2.0
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
